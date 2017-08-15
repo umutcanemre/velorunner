@@ -1,12 +1,14 @@
 //state that contains code for playing the game
 
-velorunner.PlayState = function() {};
+velorunner.PlayState = function() {
+	velorunner.player = null;
+	velorunner.background = null;
+	velorunner.globalMap = null;
+	velorunner.layer = null;
+	velorunner.Obstacles = null;
+};
 
-var player;
-var background;
-var globalMap;
-var layer;
-var Obstacles;
+
 
 velorunner.PlayState.prototype = {
 	create: function () {
