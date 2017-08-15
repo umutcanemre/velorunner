@@ -1,6 +1,6 @@
 //state that contains code for playing the game
 
-var PlayState = function() {};
+velorunner.PlayState = function() {};
 
 var player;
 var background;
@@ -8,7 +8,7 @@ var globalMap;
 var layer;
 var Obstacles;
 
-PlayState.prototype = {
+velorunner.PlayState.prototype = {
 	create: function () {
 		//start physics, call functions to initialize world and player
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
@@ -23,7 +23,7 @@ PlayState.prototype = {
 
 		//this.createPlayer(this.game.world.centerX - 60, 50);
 
-		var player = this.createPlayer(1, 1);
+		this.createPlayer(1, 1);
 
 		//this.bindControls();		 
 
@@ -35,7 +35,7 @@ PlayState.prototype = {
 
 	createBackground: function() {
 		//initialize background(s)
-		background = this.game.add.tileSprite(0, 0, gameWidth * 10, gameHeight, 'atlas', 'bg.png');
+		background = this.game.add.tileSprite(0, 0, velorunner.gameWidth, velorunner.gameHeight, 'atlas', 'bg.png');
 		//background.fixedToCamera = true;
 	},
 
@@ -60,13 +60,13 @@ PlayState.prototype = {
 	},
 
 	createObstacle: function(x, y) {
-		var temp = new Obstacle(this.game, x, y);
+		var temp = new velorunner.Obstacle(this.game, x, y);
 		this.game.add.existing(temp);
 		Obstacles.add(temp);
 	},
 
 	createPlayer: function (x, y) {
-		player = new Player (this.game, x, y);
+		player = new velorunner.Player (this.game, x, y);
 		this.game.add.existing(player);
 	},
 
@@ -178,7 +178,7 @@ PlayState.prototype = {
 
 	}, */
 
-	coastStop: function(entity, deaccelerationRate) {
+	/* coastStop: function(entity, deaccelerationRate) {
 
 		if (entity.body.velocity.x > 0) {
 			if (entity.body.velocity.x - deaccelerationRate < 0) {
@@ -199,7 +199,7 @@ PlayState.prototype = {
 				entity.body.velocity.x += deaccelerationRate;
 			}
 		}
-	},
+	}, */
 
 	
 	render: function() {
@@ -211,25 +211,5 @@ PlayState.prototype = {
 };
 
 
-Obstacle = function(game, x, y) {
-		Phaser.Sprite.call(this, game, x, y, "atlas", 'testing1.png');
-		game.physics.enable(this, Phaser.Physics.ARCADE);
-		this.enableBody = true;
 
-		//this.body.immovable = true;
-
-
-		//this.body.allowGravity = false;
-
-		this.health = 400;
-
-};
-
-Obstacle.prototype = Object.create(Phaser.Sprite.prototype);
-Obstacle.prototype.constructor = Obstacle;
-
-Obstacle.prototype.update = function () {
-	this.game.physics.arcade.collide(this, layer);
-	//this.game.physics.arcade.collide(player, this);
-};
 

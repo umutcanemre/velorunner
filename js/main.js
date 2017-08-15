@@ -1,15 +1,18 @@
-var gameWidth = 800, gameHeight = 600;
+var velorunner = velorunner || {};
 
-var game = new Phaser.Game(gameWidth, gameHeight, Phaser.AUTO), 
-BootState = function () {},
-gameOptions = {
+velorunner.gameWidth = 800; 
+velorunner.gameHeight = 600;
+
+velorunner.game = new Phaser.Game(this.gameWidth, this.gameHeight, Phaser.AUTO);
+velorunner.BootState = function () {};
+velorunner.gameOptions = {
 	playSound: true,
 	playMusic: true
-},
-musicPlayer;
+};
+velorunner.musicPlayer = {};
 
 
-BootState.prototype = {
+velorunner.BootState.prototype = {
 	preload: function () {
 		this.game.load.image('loadingbar', 'assets/images/loadingbar.png');
 		this.game.load.image('logo', 'assets/images/logo2.png');
@@ -23,21 +26,20 @@ BootState.prototype = {
 
 		//game.scale.scaleMode = Phaser.ScaleManager.USER_SCALE;
 		//game.scale.setUserScale(2, 2);
-
-// enable crisp rendering
-		game.renderer.renderSession.roundPixels = true;
+		
+		this.game.renderer.renderSession.roundPixels = true;
 		Phaser.Canvas.setImageRenderingCrisp(this.game.canvas);
 
 
-		this.game.state.add('LoadState', LoadState);
+		this.game.state.add('LoadState', velorunner.LoadState);
 		this.game.state.start('LoadState');
 	}
 };
 
 
-this.game.state.add('BootState', BootState);
+velorunner.game.state.add('BootState', velorunner.BootState);
 /*game.state.add('LoadState', LoadState);
 game.state.add('MenuState', MenuState);
 game.state.add('PlayState', PlayState); */
 
-this.game.state.start("BootState"); 
+velorunner.game.state.start("BootState"); 

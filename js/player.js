@@ -1,4 +1,4 @@
-Player = function(game, x, y) {
+velorunner.Player = function(game, x, y) {
 	this.acceleration = 5;
 	this.deaccelerationRate = 10;
 	//this.maxVelocity = 900;
@@ -31,10 +31,10 @@ Player = function(game, x, y) {
 
 };
 
-Player.prototype = Object.create(Phaser.Sprite.prototype);
-Player.prototype.constructor = Player;
+velorunner.Player.prototype = Object.create(Phaser.Sprite.prototype);
+velorunner.Player.prototype.constructor = velorunner.Player;
 
-Player.prototype.update = function () {
+velorunner.Player.prototype.update = function () {
 	//game.physics.arcade.collide(this, layer);
 	//movePlayer();
 	//animatePlayer();

@@ -1,14 +1,15 @@
 //Game state to display menu
 
-var MenuState = function() {};
+velorunner.MenuState = function() {};
 
-MenuState.prototype = {
+velorunner.MenuState.prototype = {
 	menuConfig:  {
 		startX: "center",
 		startY: 188
 	}, 
 
 	init: function() {
+		console.log('loading succesful');
     	this.gameTitle = this.game.add.image(this.game.world.centerX, 148, 'gameTitle');
 		utils.centerGameObjects([this.gameTitle]);
 		this.optionCount = 1;
@@ -22,20 +23,20 @@ MenuState.prototype = {
 			music.play;
 		} */
 
-		game.stage.disableVisibilityChange = true;
+		this.game.stage.disableVisibilityChange = true;
 		this.game.stage.backgroundColor = "#050505";
 		this.game.add.existing(this.gameTitle);
 
 		this.addMenuOption('play', function () {
-      		this.game.state.start('PlayState');
+      		velorunner.game.state.start('PlayState');
     	}, "redbase");
 
     	this.addMenuOption('levels', function () {
       		console.log('You clicked levels!');
-    	});
+    	}); 
 
     	this.addMenuOption('options', function () {
-      		this.game.state.start('OptionsState');
+      		velorunner.game.state.start('OptionsState');
     	});
 
     	this.addMenuOption('credits', function () {
@@ -45,4 +46,4 @@ MenuState.prototype = {
 	} 
 } ;
 
-Phaser.Utils.mixinPrototype(MenuState.prototype, mixins);
+Phaser.Utils.mixinPrototype(velorunner.MenuState.prototype, velorunner.mixins);
