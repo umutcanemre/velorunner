@@ -1,9 +1,9 @@
 var velorunner = velorunner || {};
 
-velorunner.gameWidth = 800; 
+velorunner.gameWidth = 1500; 
 velorunner.gameHeight = 600;
 
-velorunner.game = new Phaser.Game(this.gameWidth, this.gameHeight, Phaser.AUTO);
+velorunner.game = new Phaser.Game(velorunner.gameWidth, velorunner.gameHeight, Phaser.AUTO);
 velorunner.BootState = function () {};
 velorunner.gameOptions = {
 	playSound: true,
