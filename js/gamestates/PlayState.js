@@ -1,11 +1,14 @@
 //state that contains code for playing the game
 
+//TODO Fix obstacle recycling
+
 velorunner.PlayState = function() {
-	velorunner.player = null;
-	velorunner.background = null;
-	velorunner.globalMap = null;
-	velorunner.layer = null;
-	velorunner.Obstacles = null;
+	this.player = null;
+	this.background = null;
+	this.globalMap = null;
+	this.layer = null;
+	this.Obstacles = null;
+	velorunner.levelSpeed = 300;
 };
 
 
@@ -25,34 +28,25 @@ velorunner.PlayState.prototype = {
 
 		this.createPlayer(1, 550);		 
 
-		this.game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER);
+		//this.game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER);
 	},
 
 
 	createBackground: function() {
 		//initialize background(s)
-		background = this.game.add.tileSprite(0, 0, velorunner.gameWidth, velorunner.gameHeight, 'atlas', 'bg.png');
+		this.background = this.game.add.tileSprite(0, 0, velorunner.gameWidth, velorunner.gameHeight, 'atlas', 'bg.png');
 		//background.fixedToCamera = true;
-	},
-
-	createTilemap: function() {
-		//initialize tilemap
-		globalMap = this.game.add.tilemap('map');
-		globalMap.addTilesetImage('placeholderTileset', 'tileset');
-
-		//create layers
-		layer = globalMap.createLayer('Tile Layer 1');
-		layer.resizeWorld();
-
-		//set tiles that can be collided with
-		globalMap.setCollisionByExclusion([0]);
 	},
 
 	populate: function() {
 		Obstacles = this.game.add.group();
 		//Obstacles.enableBody = true;
+		var lastPos = velorunner.gameWidth;
 
-		this.createObstacle(this.game.world.centerX, 550);
+		for (var i = 0; i < 10; i++) {
+			this.createObstacle(lastPos + 250 + (Math.floor(Math.random() * 1000)), 550);
+			lastPos = Obstacles.children[i].x;
+		}
 	},
 
 	createObstacle: function(x, y) {
@@ -80,13 +74,22 @@ velorunner.PlayState.prototype = {
 
 	update: function() {
 		this.game.physics.arcade.collide(player, Obstacles, null, this.playerObstacleCollision, this);
+		this.background.autoScroll(-velorunner.levelSpeed / 4, 0);
+		this.recycleObstacles();
+		//Obstacles.body.velocity.x = this.levelSpeed;
 
+		velorunner.levelSpeed += 0.1;
+
+		Obstacles.forEach(function (obstacle) {
+			console.log(obstacle.BreakVel);
+		})
 	},
 
 	playerObstacleCollision: function(Player, obstacle) {
 
-		if (Math.abs(Player.body.velocity.x) >= obstacle.health) {
+		if (Math.abs(Player.body.velocity.x) >= obstacle.BreakVel) {
 			obstacle.kill();
+			this.reviveObstacle(obstacle);
 			return false;
 		} 
 
@@ -94,8 +97,28 @@ velorunner.PlayState.prototype = {
 			//return true;
 			player.kill();
 		}
-
 	}, 
+
+	reviveObstacle: function (obstacle) {
+		obstacle.position.x = velorunner.gameWidth + 250 + Math.floor(Math.random() * 1000);
+		obstacle.revive();
+	},
+
+	recycleObstacles: function () {
+		Obstacles.forEachAlive(function (obstacle) {
+			if (obstacle.body.x + obstacle.width < 0) {
+				obstacle.kill();	
+				this.reviveObstacle(obstacle);
+			}
+		}, this) 
+
+		/*Obstacles.forEachAlive(function (obstacle) {
+			if (obstacle.body.x + obstacle.width < 0) {
+				obstacle.kill();
+				this.reviveObstacle(obstacle);
+			}
+		}, this) */
+	},
 	
 	render: function() {
 		this.game.debug.bodyInfo(player, 0, 10);
@@ -105,6 +128,6 @@ velorunner.PlayState.prototype = {
 
 };
 
-
-
-
+velorunner.getLevelSpeed = function () {
+	return velorunner.levelSpeed;
+}

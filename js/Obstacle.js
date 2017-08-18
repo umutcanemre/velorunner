@@ -1,4 +1,4 @@
-velorunner.Obstacle = function(game, x, y) {
+velorunner.Obstacle = function(game, x, y, speed) {
 		Phaser.Sprite.call(this, game, x, y, "atlas", 'testing1.png');
 		game.physics.enable(this, Phaser.Physics.ARCADE);
 		this.enableBody = true;
@@ -8,7 +8,9 @@ velorunner.Obstacle = function(game, x, y) {
 
 		this.body.allowGravity = false;
 
-		this.health = 400;
+		this.BreakVel = 400;
+
+		//this.body.velocity.x = -300;
 
 };
 
@@ -16,5 +18,9 @@ velorunner.Obstacle.prototype = Object.create(Phaser.Sprite.prototype);
 velorunner.Obstacle.prototype.constructor = velorunner.Obstacle;
 
 velorunner.Obstacle.prototype.update = function () {
-	
+	this.body.velocity.x = -velorunner.getLevelSpeed();
+
+	/*if (this.body.x + this.width < 0) {
+		this.kill();
+	} */
 };
