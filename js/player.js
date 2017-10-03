@@ -77,7 +77,7 @@ velorunner.Player.prototype.update = function () {
 	}
 
 	if (this.playerControls.up.isDown && this.body.onFloor()) {
-		this.body.velocity.y = -210;
+		this.body.velocity.y = -550;
 	}
 
 	if (!this.body.onFloor()) {
