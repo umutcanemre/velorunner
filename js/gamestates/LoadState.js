@@ -28,7 +28,6 @@ velorunner.LoadState.prototype = {
 		this.game.load.script('style', 'js/lib/style.js');
 		this.game.load.script('MenuState', 'js/gamestates/MenuState.js');
 		this.game.load.script('PlayState', 'js/gamestates/PlayState.js');
-		//this.game.load.script('LevelsState', 'js/gamestates/LevelsState.js');
 		this.game.load.script('OptionsState', 'js/gamestates/OptionsState.js');
 		this.game.load.script('CreditsState', 'js/gamestates/CreditsState.js');
 		this.game.load.script('PlayerJS', 'js/Player.js');

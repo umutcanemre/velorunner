@@ -3,7 +3,7 @@ velorunner.mixins = {
 		className = className || (className = this.menuConfig.className || "default");
 		var x = this.menuConfig.startX === "center" ? this.game.world.centerX : this.menuConfig.startX;
 		var y = this.menuConfig.startY;
-		var txt = this.game.add.text(x, (this.optionCount * 48) + y, text, mainstyle.menuoption[className]);	
+		var txt = this.game.add.text(x, (this.optionCount * 48) + y, text, mainstyle.menuoption[className]);
 		txt.anchor.setTo(this.menuConfig.startX === "center" ? 0.5 : 0.0);
 		txt.inputEnabled = true;
 		txt.events.onInputUp.add(callback);

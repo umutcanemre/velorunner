@@ -15,16 +15,23 @@ velorunner.PlayState = function() {
 
 
 velorunner.PlayState.prototype = {
+	menuConfig: {
+		startX: 'center',
+		startY: 188
+	},
+
+
+
 	create: function () {
 		//start physics, call functions to initialize world and player
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.physics.arcade.gravity.y = 1300;
 		this.createBackground();
 		this.populate();
+		this.optionCount = 1;
 		this.createPlayer(1, 550);		 
 		//this.game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER);
 	},
-
 
 	createBackground: function() {
 		//initialize background(s)
@@ -48,6 +55,7 @@ velorunner.PlayState.prototype = {
 	},
 
 	createObstacle: function(x, y) {
+		//Creates an obstacle object, adds it to obstacles group, sets lastSpawnedObstacle variable to the position of newly created obstacle
 		var temp = new velorunner.Obstacle(this.game, x, y);
 		this.game.add.existing(temp);
 		Obstacles.add(temp);
@@ -55,7 +63,8 @@ velorunner.PlayState.prototype = {
 	},
 
 	createPlayer: function (x, y) {
-		player = new velorunner.Player (this.game, x, y);
+		//creats the player
+		player = new velorunner.Player(this.game, x, y);
 		this.game.add.existing(player);
 	},
 
@@ -89,7 +98,8 @@ velorunner.PlayState.prototype = {
 		} 
 
 		else {
-			player.kill();
+			//player.kill();
+			this.killPlayer();
 		}
 	}, 
 
@@ -105,13 +115,37 @@ velorunner.PlayState.prototype = {
 			}
 		}, this) 
 	},
+
+	killPlayer: function() {
+		player.alive = false;
+		player.kill();
+		this.gameOver();
+	},
+
+	gameOver: function() {
+		var bmd = this.game.add.bitmapData(1, 1);
+		bmd.fill(0, 0, 0);
+		var translucentOverlay = this.game.add.sprite(0, 0, bmd);
+		translucentOverlay.scale.setTo(velorunner.gameWidth, velorunner.gameHeight);
+		translucentOverlay.alpha = 0;
+		this.game.add.tween(translucentOverlay).to({alpha:0.5}, 500, Phaser.Easing.Quadratic.In, true);
+		this.gameTitle = this.game.add.image(this.game.world.centerX, 148, 'gameTitle');
+		utils.centerGameObjects([this.gameTitle]);
+		this.addMenuOption('Play Again', function () {
+      		velorunner.game.state.start('PlayState');
+    	}, "redbase");
+	},
 	
 	render: function() {
 		this.game.debug.bodyInfo(Obstacles.children[1], 0, 10);
 	},
+
+	
 
 };
 
 velorunner.getLevelSpeed = function () {
 	return velorunner.levelSpeed;
 }
+
+Phaser.Utils.mixinPrototype(velorunner.PlayState.prototype, velorunner.mixins);

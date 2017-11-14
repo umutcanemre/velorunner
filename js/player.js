@@ -1,6 +1,7 @@
 velorunner.Player = function(game, x, y) {
 	this.acceleration = 5;
 	this.deaccelerationRate = 10;
+	this.alive = true;
 	//this.maxVelocity = 900;
 
 	Phaser.Sprite.call(this, game, x, y, "atlas", 'testing0.png');
@@ -38,56 +39,56 @@ velorunner.Player.prototype.update = function () {
 	//game.physics.arcade.collide(this, layer);
 	//movePlayer();
 	//animatePlayer();
-
-	if (this.playerControls.left.isDown) {
-		this.body.velocity.x -= this.acceleration;
-		//this.scale.setTo(-1);
-		if (this.body.onFloor()) {
-			this.animations.play('left');
+	if (this.alive) {
+		if (this.playerControls.left.isDown) {
+			this.body.velocity.x -= this.acceleration;
+			//this.scale.setTo(-1);
+			if (this.body.onFloor()) {
+				this.animations.play('left');
+			}
 		}
-	}
 
-	else if (this.playerControls.right.isDown) {
-		this.body.velocity.x += this.acceleration;
-		//this.scale.setTo(1);
-	}
-
-	else {
-		//this.coastStop(player, 10)
-		if (this.body.velocity.x > 0) {
-			if (this.body.velocity.x - this.deaccelerationRate < 0) {
-				this.body.velocity.x = 0;
-			}
-
-			else {
-				this.body.velocity.x -= this.deaccelerationRate;
-			}
+		else if (this.playerControls.right.isDown) {
+			this.body.velocity.x += this.acceleration;
+			//this.scale.setTo(1);
 		}
 
 		else {
-			if (this.body.velocity.x + this.deaccelerationRate > 0) {
-				this.body.velocity.x = 0;
+			//this.coastStop(player, 10)
+			if (this.body.velocity.x > 0) {
+				if (this.body.velocity.x - this.deaccelerationRate < 0) {
+					this.body.velocity.x = 0;
+				}
+
+				else {
+					this.body.velocity.x -= this.deaccelerationRate;
+				}
 			}
 
 			else {
-				this.body.velocity.x += this.deaccelerationRate;
+				if (this.body.velocity.x + this.deaccelerationRate > 0) {
+					this.body.velocity.x = 0;
+				}
+
+				else {
+					this.body.velocity.x += this.deaccelerationRate;
+				}
 			}
+
 		}
 
-	}
+		if (this.playerControls.up.isDown && this.body.onFloor()) {
+			this.body.velocity.y = -550;
+		}
 
-	if (this.playerControls.up.isDown && this.body.onFloor()) {
-		this.body.velocity.y = -550;
-	}
+		if (!this.body.onFloor()) {
+			this.animations.play('jump');
+		}
 
-	if (!this.body.onFloor()) {
-		this.animations.play('jump');
+		else if (this.body.onFloor() && !this.playerControls.left.isDown){
+			this.animations.play('right');
+		}
 	}
-
-	else if (this.body.onFloor() && !this.playerControls.left.isDown){
-		this.animations.play('right');
-	}
-
 
 };
 

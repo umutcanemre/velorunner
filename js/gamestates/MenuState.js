@@ -31,10 +31,6 @@ velorunner.MenuState.prototype = {
       		velorunner.game.state.start('PlayState');
     	}, "redbase");
 
-    	this.addMenuOption('levels', function () {
-      		console.log('You clicked levels!');
-    	}); 
-
     	this.addMenuOption('options', function () {
       		velorunner.game.state.start('OptionsState');
     	});
