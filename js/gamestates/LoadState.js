@@ -1,26 +1,36 @@
 //state used to display progress in loading main game assets
-
 velorunner.LoadState = function() {};
 
+//code for loadstate
 velorunner.LoadState.prototype = {
-	//functions to organize types of media being loaded
+	//initialize loading bar and logo
 	init: function () {
-		this.loadingBar = this.game.make.sprite(this.game.world.centerX - 200, 400, "loadingbar");
-		this.logo = this.game.make.sprite(this.game.world.centerX, 200, 'logo');	
-		utils.centerGameObjects([this.logo]);		
+		//initialize loading bar and logo
+		this.loadingBar = this.game.make.sprite(this.game.world.centerX, 400, "loadingbar");
+		this.logo = this.game.make.sprite(this.game.world.centerX, 200, 'logo');
+
+		//center anchor point of both logo and loading bar	
+		utils.centerGameObjects([this.logo, this.loadingBar]);		
 	},
 
+
 	preload: function () {
+		//make everything black
 		this.game.stage.backgroundColor = "#050505";
+		//add loading bar and logo to the screen
 		this.game.add.existing(this.logo);
 		this.game.add.existing(this.loadingBar);
+		//make this.loadingbar the phaser preload sprite
 		this.load.setPreloadSprite(this.loadingBar);
+
+		//call functions to load each section of the game
 		this.loadScripts();
 		this.loadMusic();
 		this.loadTextures();
 		this.loadFonts(); 
 	},
 
+	//functions to load various parts of the game
 	loadScripts: function () {
 		console.log('loading scripts..');
 		this.game.load.script('WebFont', 'js/vendor/webfontloader.js');
@@ -35,7 +45,7 @@ velorunner.LoadState.prototype = {
 	},
 
 	loadMusic: function() {
-		console.log('loading music..');
+		//console.log('loading music..');
 		//this.game.load.audio('monkeys', 'assets/music/monkeys.mp3');
 	},
 
@@ -58,6 +68,7 @@ velorunner.LoadState.prototype = {
 		};
 	}, 
 
+	//add the loaded game states to the game
 	addGameStates: function () {
 		console.log('initializing Gamestates');		
 		this.game.state.add('MenuState', velorunner.MenuState);
@@ -67,8 +78,9 @@ velorunner.LoadState.prototype = {
 		//this.game.state.add('CreditsState', velorunner.CreditsState);
 	},
 
+	//add music to the game
 	addGameMusic: function() {
-		console.log('adding music..');
+		//console.log('adding music..');
 		//musicPlayer = this.game.add.audio('monkeys');
 		//musicPlayer.loop= true;
 		//musicPlayer.play();
@@ -76,9 +88,10 @@ velorunner.LoadState.prototype = {
 	},
 
 	create: function () {
-
+		//add gamestates and music to the game
 		this.addGameStates();
 		this.addGameMusic();
+		//start the menu
 		this.game.state.start('MenuState');
 	}
 };

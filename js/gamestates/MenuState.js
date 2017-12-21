@@ -1,8 +1,9 @@
 //Game state to display menu
-
 velorunner.MenuState = function() {};
 
+//code for menustate
 velorunner.MenuState.prototype = {
+	//declare menu config, for 
 	menuConfig:  {
 		startX: "center",
 		startY: 188
