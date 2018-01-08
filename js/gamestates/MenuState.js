@@ -24,10 +24,14 @@ velorunner.MenuState.prototype = {
 			music.play;
 		} */
 
+		//make sure the game doesn't pause if it loses focus
 		this.game.stage.disableVisibilityChange = true;
+		//make the background a dark color
 		this.game.stage.backgroundColor = "#050505";
+		//add the logo
 		this.game.add.existing(this.gameTitle);
 
+		//ad text menu options to the menu, each leading to a different state
 		this.addMenuOption('play', function () {
       		velorunner.game.state.start('PlayState');
     	}, "redbase");
@@ -43,4 +47,5 @@ velorunner.MenuState.prototype = {
 	} 
 } ;
 
+//add in the game mixins to this game state for the menu options
 Phaser.Utils.mixinPrototype(velorunner.MenuState.prototype, velorunner.mixins);
