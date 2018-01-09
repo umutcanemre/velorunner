@@ -152,7 +152,8 @@ velorunner.PlayState.prototype = {
 
 		//add a play again button
 		this.addMenuOption('Play Again', function () {
-			this.levelSpeed = 300;
+			console.log("Game Restarting");
+			velorunner.levelSpeed = 300;
       		velorunner.game.state.start('PlayState');
     	}, "redbase");
 	},
