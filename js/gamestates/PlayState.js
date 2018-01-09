@@ -31,7 +31,7 @@ velorunner.PlayState.prototype = {
 		this.createBackground();
 		this.populate();
 		this.optionCount = 1;
-		this.createPlayer(1, 550);		 
+		this.createPlayer(240, 550);		 
 	},
 
 	createBackground: function() {
@@ -68,7 +68,7 @@ velorunner.PlayState.prototype = {
 	},
 
 	createPlayer: function (x, y) {
-		//creats the player
+		//creates the player
 		player = new velorunner.Player(this.game, x, y);
 		this.game.add.existing(player);
 	},
