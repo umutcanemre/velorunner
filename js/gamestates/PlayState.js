@@ -3,6 +3,7 @@
 //TODO Fix obstacle recycling
 
 velorunner.PlayState = function() {
+	//variables
 	this.player = null;
 	this.background = null;
 	this.globalMap = null;
@@ -15,6 +16,7 @@ velorunner.PlayState = function() {
 
 
 velorunner.PlayState.prototype = {
+	//menu config for game over screen
 	menuConfig: {
 		startX: 'center',
 		startY: 188
@@ -30,7 +32,6 @@ velorunner.PlayState.prototype = {
 		this.populate();
 		this.optionCount = 1;
 		this.createPlayer(1, 550);		 
-		//this.game.camera.follow(player, Phaser.Camera.FOLLOW_PLATFORMER);
 	},
 
 	createBackground: function() {
@@ -40,12 +41,15 @@ velorunner.PlayState.prototype = {
 	},
 
 	populate: function() {
+		//add group for obstacles
 		Obstacles = this.game.add.group();
 		//var lastPos = velorunner.gameWidth;
 
+		//create first obstacle and make the last spawned obstacle 0
 		this.createObstacle(velorunner.gameWidth + (Math.floor(Math.random() * 300)), 550);
 		this.lastSpawnedObstacle = 0;
 
+		//spawn 5 total obstacles
 		for (var i = 0; i < 5; i++) {
 			this.createObstacle(Obstacles.children[this.lastSpawnedObstacle].x + 250 + (Math.floor(Math.random() * 1000)), 550);
 			//this.lastSpawnedObstacle = Obstacles.children[i].z;
@@ -54,6 +58,7 @@ velorunner.PlayState.prototype = {
 		}
 	},
 
+	//spawn a single obstalce
 	createObstacle: function(x, y) {
 		//Creates an obstacle object, adds it to obstacles group, sets lastSpawnedObstacle variable to the position of newly created obstacle
 		var temp = new velorunner.Obstacle(this.game, x, y);
@@ -82,6 +87,7 @@ velorunner.PlayState.prototype = {
 	}, */
 
 	update: function() {
+		//collide player with all obstacles
 		this.game.physics.arcade.collide(player, Obstacles, null, this.playerObstacleCollision, this);
 		this.background.autoScroll(-velorunner.levelSpeed / 4, 0);
 		this.wrapObstaclesAround();
@@ -90,13 +96,16 @@ velorunner.PlayState.prototype = {
 
 	},
 
-	playerObstacleCollision: function(Player, obstacle) {
 
+	//in the event of player obstacle collision
+	playerObstacleCollision: function(Player, obstacle) {
+		//if the player is moving fast enough, break "kill" the obstalce
 		if (Math.abs(Player.body.velocity.x) >= obstacle.BreakVel) {
 			this.resetObstacle(obstacle);
 			return false;
 		} 
 
+		//otherwise end the game
 		else {
 			//player.kill();
 			this.killPlayer();
@@ -108,6 +117,7 @@ velorunner.PlayState.prototype = {
 		this.lastSpawnedObstacle = obstacle.z;
 	},
 
+	//every time an obstalce reaches the end, put it back to the start
 	wrapObstaclesAround: function () {
 		Obstacles.forEachAlive(function (obstacle) {
 			if (obstacle.body.x + obstacle.width < 0) {
@@ -116,26 +126,38 @@ velorunner.PlayState.prototype = {
 		}, this) 
 	},
 
+	//function to kill player and end game
 	killPlayer: function() {
+		//kill player sprite and do gameover
 		player.alive = false;
 		player.kill();
 		this.gameOver();
 	},
 
 	gameOver: function() {
+		//create a game over screen
+		//add a translucent overlay
 		var bmd = this.game.add.bitmapData(1, 1);
 		bmd.fill(0, 0, 0);
 		var translucentOverlay = this.game.add.sprite(0, 0, bmd);
+		//set overlay to game size
 		translucentOverlay.scale.setTo(velorunner.gameWidth, velorunner.gameHeight);
+		//start it transparent
 		translucentOverlay.alpha = 0;
+		//make it gradually become darker
 		this.game.add.tween(translucentOverlay).to({alpha:0.5}, 500, Phaser.Easing.Quadratic.In, true);
+		//add logo
 		this.gameTitle = this.game.add.image(this.game.world.centerX, 148, 'gameTitle');
 		utils.centerGameObjects([this.gameTitle]);
+
+		//add a play again button
 		this.addMenuOption('Play Again', function () {
+			this.levelSpeed = 300;
       		velorunner.game.state.start('PlayState');
     	}, "redbase");
 	},
 	
+	//display debug info
 	render: function() {
 		this.game.debug.bodyInfo(Obstacles.children[1], 0, 10);
 	},
@@ -144,6 +166,7 @@ velorunner.PlayState.prototype = {
 
 };
 
+//return speed of level
 velorunner.getLevelSpeed = function () {
 	return velorunner.levelSpeed;
 }

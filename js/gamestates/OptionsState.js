@@ -25,18 +25,24 @@ velorunner.OptionsState.prototype = {
 		//make dark background color
 		this.game.stage.backgroundColor = "#050505";
 
-		//depending on whether the 
+		//depending on whether music is enabled or not, show the option as "Mute Music" or "Play Music," toggle music volume on press
 		this.addMenuOption(playMusic ? 'mute music' : 'play music', function (target) {
+			//toggle whether music is playing or not
       		playMusic = !playMusic;
+      		//toggle button
       		target.text = playMusic ? 'mute music' : 'play music';
+      		//turn music on or off
       		velorunner.musicPlayer.volume = playMusic ? '1' : '0';
     	});
 
+		//nothing yet
     	this.addMenuOption('sound', function (target) {
       		console.log('you pressed sound');
     	});
 
+    	//back to menu button
 		this.addMenuOption('back', function () {
+			//goes back to menu
       		velorunner.game.state.start('MenuState');
     	}); 
 	} 

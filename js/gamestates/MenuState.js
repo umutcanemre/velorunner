@@ -33,10 +33,12 @@ velorunner.MenuState.prototype = {
 
 		//ad text menu options to the menu, each leading to a different state
 		this.addMenuOption('play', function () {
+			//start play state
       		velorunner.game.state.start('PlayState');
     	}, "redbase");
 
     	this.addMenuOption('options', function () {
+    		//start option state
       		velorunner.game.state.start('OptionsState');
     	});
 
