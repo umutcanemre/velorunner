@@ -51,7 +51,7 @@ velorunner.Player.prototype.update = function () {
 
 	//if it's alive, move and animate the player based on their movements
 	if (this.alive) {
-		//if pressing left
+		/*//if pressing left
 		if (this.playerControls.left.isDown) {
 			//make player move left
 			this.body.velocity.x -= this.acceleration;
@@ -59,10 +59,10 @@ velorunner.Player.prototype.update = function () {
 			if (this.body.onFloor()) {
 				this.animations.play('left');
 			}
-		}
+		} */
 
-		//or if they are pressing right, make them move right
-		else if (this.playerControls.right.isDown) {
+		//if they are pressing right, make them move right
+		if (this.playerControls.down.isDown) {
 			this.body.velocity.x += this.acceleration;
 			//this.scale.setTo(1);
 		}
@@ -72,10 +72,11 @@ velorunner.Player.prototype.update = function () {
 			//slowly make the player stop after they release the key
 
 			//if the player has momentum towards the right
-			if (this.body.velocity.x > 0) {
+			if (this.x > this.anchor) {
 				//if reducing the player's velocity again will make the player start moving in the other direction, stop reducing velocity and stop the player
-				if (this.body.velocity.x - this.deaccelerationRate < 0) {
+				if (this.x - this.body.velocity.x < 0) {
 					this.body.velocity.x = 0;
+					this.x = this.anchor;
 				}
 
 				//slowly reduce the player's velocity by adding velocity in the other direction
@@ -84,6 +85,7 @@ velorunner.Player.prototype.update = function () {
 				}
 			}
 
+			/*
 			//if the player has momentum towards the left
 			else {
 				//if reducing the player's velocity again will make the player start moving in the other direction, stop reducing velocity and stop the player
@@ -94,7 +96,7 @@ velorunner.Player.prototype.update = function () {
 				else {
 					this.body.velocity.x += this.deaccelerationRate;
 				}
-			}
+			}*/
 
 		}
 
