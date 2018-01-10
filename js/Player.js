@@ -1,10 +1,10 @@
 //player object
-velorunner.Player = function(game, x, y, anchor) {
+velorunner.Player = function(game, x, y) {
 	//variables controlling how fast it accelerates, deaccelerates, and it's status of living
 	this.acceleration = 5;
 	this.deaccelerationRate = 10;
 	this.alive = true;
-	this.anchor = anchor;
+	this.anchor = x;
 	//this.maxVelocity = 900;
 
 	//invoke phaser sprite for player

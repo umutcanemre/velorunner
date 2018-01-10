@@ -10,6 +10,7 @@ velorunner.PlayState = function() {
 	this.layer = null;
 	this.Obstacles = null;
 	this.lastSpawnedObstacle = 0;
+	this.distance = 0;
 	velorunner.levelSpeed = 300;
 };
 
@@ -21,8 +22,6 @@ velorunner.PlayState.prototype = {
 		startX: 'center',
 		startY: 188
 	},
-
-
 
 	create: function () {
 		//start physics, call functions to initialize world and player
@@ -37,6 +36,7 @@ velorunner.PlayState.prototype = {
 	createBackground: function() {
 		//initialize background(s)
 		this.background = this.game.add.tileSprite(0, 0, velorunner.gameWidth, velorunner.gameHeight, 'atlas', 'bg.png');
+		this.distanceText = this.game.add.text(15, 15, "Distance: " + distance, {font: '24px 8-bitpusab', fill: 'red'})
 		//background.fixedToCamera = true;
 	},
 
@@ -92,6 +92,8 @@ velorunner.PlayState.prototype = {
 		this.background.autoScroll(-velorunner.levelSpeed / 4, 0);
 		this.wrapObstaclesAround();
 
+		this.distance += (velorunner.levelSpeed/2000);
+		this.distanceText.setText("Distance: " + this.distance);
 		velorunner.levelSpeed += 0.1;
 
 	},
