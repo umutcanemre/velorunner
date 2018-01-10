@@ -36,7 +36,7 @@ velorunner.PlayState.prototype = {
 	createBackground: function() {
 		//initialize background(s)
 		this.background = this.game.add.tileSprite(0, 0, velorunner.gameWidth, velorunner.gameHeight, 'atlas', 'bg.png');
-		this.distanceText = this.game.add.text(15, 15, "Distance: " + distance, {font: '24px 8-bitpusab', fill: 'red'})
+		this.distanceText = this.game.add.text(15, 15, "Distance: " + this.distance, {font: '24px 8-bitpusab', fill: 'red'})
 		//background.fixedToCamera = true;
 	},
 
