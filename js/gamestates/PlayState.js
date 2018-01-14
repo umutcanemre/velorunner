@@ -11,7 +11,7 @@ velorunner.PlayState = function() {
 	this.Obstacles = null;
 	this.lastSpawnedObstacle = 0;
 	this.distance = 0;
-	velorunner.levelSpeed = 300;
+	velorunner.levelSpeed = 400;
 };
 
 
@@ -24,6 +24,16 @@ velorunner.PlayState.prototype = {
 	},
 
 	create: function () {
+		this.player = null;
+		this.background = null;
+		this.globalMap = null;
+		this.layer = null;
+		this.Obstacles = null;
+		this.lastSpawnedObstacle = 0;
+		this.distance = 0;
+		velorunner.levelSpeed = 400;
+
+
 		//start physics, call functions to initialize world and player
 		this.game.physics.startSystem(Phaser.Physics.ARCADE);
 		this.game.physics.arcade.gravity.y = 1300;
@@ -36,7 +46,8 @@ velorunner.PlayState.prototype = {
 	createBackground: function() {
 		//initialize background(s)
 		this.background = this.game.add.tileSprite(0, 0, velorunner.gameWidth, velorunner.gameHeight, 'atlas', 'bg.png');
-		this.distanceText = this.game.add.text(15, 15, "Distance: " + this.distance, {font: '24px 8-bitpusab', fill: 'red'})
+		this.distanceText = this.game.add.text(15, 15, "Distance: " + this.distance, {font: '24px 8-bitpusab', fill: 'white'})
+		this.energyBar = this.game.add.sprite(this.game.world.centerX - 200, 15, 'energybar');
 		//background.fixedToCamera = true;
 	},
 
@@ -93,7 +104,10 @@ velorunner.PlayState.prototype = {
 		this.wrapObstaclesAround();
 
 		this.distance += (velorunner.levelSpeed/2000);
-		this.distanceText.setText("Distance: " + this.distance);
+		this.distanceText.setText("Distance: " + Math.floor(this.distance));
+
+		this.energyBar.width = player.energy * 4;
+		//increase speed slowly each tick
 		velorunner.levelSpeed += 0.1;
 
 	},
@@ -155,15 +169,12 @@ velorunner.PlayState.prototype = {
 		//add a play again button
 		this.addMenuOption('Play Again', function () {
 			console.log("Game Restarting");
-			velorunner.levelSpeed = 300;
+			//velorunner.levelSpeed = 300;
       		velorunner.game.state.start('PlayState');
     	}, "redbase");
 	},
 	
 	//display debug info
-	render: function() {
-		this.game.debug.bodyInfo(Obstacles.children[1], 0, 10);
-	},
 
 	
 

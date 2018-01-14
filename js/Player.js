@@ -1,15 +1,18 @@
 //player object
 velorunner.Player = function(game, x, y) {
 	//variables controlling how fast it accelerates, deaccelerates, and it's status of living
-	this.acceleration = 5;
+	this.acceleration = 10;
 	this.deaccelerationRate = 10;
 	this.alive = true;
-	this.anchor = x;
+	this.anchorPoint = x;
+	this.energy = 100;
+	this.energyRecharge = 0.3;
+	this.dynamicDeaccelerationRate = this.deaccelerationRate;
 	//this.maxVelocity = 900;
 
 	//invoke phaser sprite for player
 	Phaser.Sprite.call(this, game, x, y, "atlas", 'testing0.png');
-	//set anchor to center
+	//set anchorPoint to center
 	utils.centerGameObjects([this]);
 
 	//enable physics and collide with world bounds
@@ -31,7 +34,8 @@ velorunner.Player = function(game, x, y) {
 		up: game.input.keyboard.addKey(Phaser.Keyboard.UP),
 		left: game.input.keyboard.addKey(Phaser.Keyboard.LEFT),
 		right: game.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
-		down: game.input.keyboard.addKey(Phaser.Keyboard.DOWN)
+		down: game.input.keyboard.addKey(Phaser.Keyboard.DOWN),
+		space: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
 	};
 
 	//capture arrow keys
@@ -45,63 +49,52 @@ velorunner.Player.prototype = Object.create(Phaser.Sprite.prototype);
 velorunner.Player.prototype.constructor = velorunner.Player;
 
 velorunner.Player.prototype.update = function () {
-	//game.physics.arcade.collide(this, layer);
-	//movePlayer();
-	//animatePlayer();
 
 	//if it's alive, move and animate the player based on their movements
 	if (this.alive) {
-		/*//if pressing left
-		if (this.playerControls.left.isDown) {
-			//make player move left
-			this.body.velocity.x -= this.acceleration;
-			//if player is on the floor, play the running left animation
-			if (this.body.onFloor()) {
-				this.animations.play('left');
-			}
-		} */
-
-		//if they are pressing right, make them move right
-		if (this.playerControls.down.isDown) {
-			this.body.velocity.x += this.acceleration;
-			//this.scale.setTo(1);
+		console.log(this.dynamicDeaccelerationRate);
+		//collide player with a distance 300 pixels away from their anchor point
+		if (this.x >= this.anchorPoint + 300 && this.body.velocity.x > 0) {
+			this.body.velocity.x = 0;
 		}
 
+		//collide player with anchor point
+		if (this.x <= this.anchorPoint) {
+			this.dynamicDeaccelerationRate = this.deaccelerationRate;
+			this.body.velocity.x = 0;
+			this.x = this.anchorPoint;
+		}
 
-		else {
-			//slowly make the player stop after they release the key
+		//if they are pressing right, make them move right
+		if (this.playerControls.down.isDown && this.energy > 0) {
+			this.dynamicDeaccelerationRate = this.deaccelerationRate;
+			this.energy -= 1;
+			if (!(this.x >= this.anchorPoint + 300)) {
+				this.body.velocity.x += this.acceleration;
+				//this.scale.setTo(1);
+			}
+		}
 
-			//if the player has momentum towards the right
-			if (this.x > this.anchor) {
-				//if reducing the player's velocity again will make the player start moving in the other direction, stop reducing velocity and stop the player
-				if (this.x - this.body.velocity.x < 0) {
-					this.body.velocity.x = 0;
-					this.x = this.anchor;
-				}
+		//slowly make the player go toward the starting point if the player is not moving right
+		else if (this.x > this.anchorPoint) {
+			//if reducing the player's velocity again will make the player start moving in the other direction, stop reducing velocity and stop the player
+			this.dynamicDeaccelerationRate = this.dynamicDeaccelerationRate/1.005;
+			this.body.velocity.x -= this.dynamicDeaccelerationRate;
 
-				//slowly reduce the player's velocity by adding velocity in the other direction
-				else {
-					this.body.velocity.x -= this.deaccelerationRate;
-				}
+		}
+
+		if (!this.playerControls.down.isDown && this.energy < 100) {
+			if (this.energy + this.energyRecharge > 100) {
+				this.energy = 100;
 			}
 
-			/*
-			//if the player has momentum towards the left
 			else {
-				//if reducing the player's velocity again will make the player start moving in the other direction, stop reducing velocity and stop the player
-				if (this.body.velocity.x + this.deaccelerationRate > 0) {
-					this.body.velocity.x = 0;
-				}
-				//slowly reduce the player's velocity by adding velocity in the other direction
-				else {
-					this.body.velocity.x += this.deaccelerationRate;
-				}
-			}*/
-
+				this.energy += this.energyRecharge;
+			}
 		}
 
 		//if the player is on the floor and they press up, give them upwards velocity
-		if (this.playerControls.up.isDown && this.body.onFloor()) {
+		if (this.playerControls.space.isDown && this.body.onFloor()) {
 			this.body.velocity.y = -550;
 		}
 

@@ -6,11 +6,11 @@ velorunner.LoadState.prototype = {
 	//initialize loading bar and logo
 	init: function () {
 		//initialize loading bar and logo
-		this.loadingBar = this.game.make.sprite(this.game.world.centerX, 400, "loadingbar");
+		this.loadingBar = this.game.make.sprite(this.game.world.centerX - 200, 400, "loadingbar");
 		this.logo = this.game.make.sprite(this.game.world.centerX, 200, 'logo');
 
 		//center anchor point of both logo and loading bar	
-		utils.centerGameObjects([this.logo, this.loadingBar]);		
+		utils.centerGameObjects([this.logo]);		
 	},
 
 
@@ -51,6 +51,8 @@ velorunner.LoadState.prototype = {
 
 	loadTextures: function () {
 		console.log('loading textures..');
+		this.game.load.image('energybar', 'assets/images/energy.png');
+
 		this.game.load.image('gameTitle', 'assets/images/title2.png');
 		this.game.load.atlas('atlas', 'assets/images/atlas.png', 'assets/images/atlas.json');
 
