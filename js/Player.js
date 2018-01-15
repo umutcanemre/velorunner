@@ -126,4 +126,9 @@ velorunner.Player.prototype.update = function () {
 		}
 	}
 
+	else {
+		this.body.velocity.y = 0;
+		this.body.velocity.x = 0;
+	}
+
 };

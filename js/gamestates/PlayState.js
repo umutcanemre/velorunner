@@ -54,10 +54,20 @@ velorunner.PlayState.prototype = {
 		this.energyBar = this.game.add.sprite(this.game.world.centerX - 200, 15, 'energybar');
 			
 		this.pauseButton = this.createButton(velorunner.gameWidth - 200, 15, velorunner.pause ? 'Unpause' : 'Pause', (function(target) {
+			if (!velorunner.pause) {
+				this.tempPlayerYVel = player.body.velocity.y;
+			}
+
+			else {
+				 player.body.velocity.y = this.tempPlayerYVel;
+			}
 			velorunner.pause = !velorunner.pause; 
 			target.text = velorunner.pause ? 'Unpause' : 'Pause';
 		}));
 		//background.fixedToCamera = true;
+
+		this.controlsText = this.game.add.text(this.game.world.centerX, 50, "Space to Jump\nDownarrow to move right\n" + this.distance, {font: '12px 8-bitpusab', fill: 'white'})
+		utils.centerGameObjects([this.controlsText]);
 	},
 
 	
@@ -117,6 +127,7 @@ velorunner.PlayState.prototype = {
 		this.distanceText.setText("Distance: " + Math.floor(this.distance));
 
 		if (!velorunner.pause) {
+			this.game.physics.arcade.gravity.y = 1300;
 			this.background.autoScroll(-velorunner.levelSpeed / 4, 0);
 			if (player.alive) {
 				this.distance += (velorunner.levelSpeed/2000);
@@ -131,6 +142,7 @@ velorunner.PlayState.prototype = {
 		}
 
 		else {
+			this.game.physics.arcade.gravity.y = 0;
 			this.background.autoScroll(0, 0);
 		}
 	},
@@ -139,7 +151,7 @@ velorunner.PlayState.prototype = {
 	//in the event of player obstacle collision
 	playerObstacleCollision: function(Player, obstacle) {
 		//if the player is moving fast enough, break "kill" the obstalce
-		if (Math.abs(Player.body.velocity.x) >= obstacle.BreakVel) {
+		if (Math.abs(player.body.velocity.x) >= obstacle.BreakVel) {
 			this.resetObstacle(obstacle);
 			return false;
 		} 
