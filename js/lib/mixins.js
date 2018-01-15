@@ -16,6 +16,7 @@ velorunner.mixins = {
 		txt.inputEnabled = true;
 		//make it so that on mouserelease of the text, the callback function is run
 		txt.events.onInputUp.add(callback);
+
 		//make it so on hover, the menuoptions style changes to the hover property of it's class
 		txt.events.onInputOver.add(function(target) {
 			target.setStyle(this.mainstyle.menuoption[className].hover);
@@ -29,4 +30,22 @@ velorunner.mixins = {
 		//increment the optioncount to keep track of how many menu options have been created in this list
 		this.optionCount ++; 
 	},
+
+	createButton: function(x, y, text, callback) {
+		var txt = this.game.add.text(x, y, text, mainstyle.menuoption.default);
+
+		txt.inputEnabled = true;
+
+		txt.events.onInputUp.add(callback);
+
+		txt.events.onInputOver.add(function(target) {
+			target.setStyle(this.mainstyle.menuoption.default.hover);
+		});
+
+		txt.events.onInputOut.add(function(target) {
+			target.setStyle(this.mainstyle.menuoption.default);
+		});
+
+		return txt;
+	}
 };

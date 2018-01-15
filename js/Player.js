@@ -51,7 +51,7 @@ velorunner.Player.prototype.constructor = velorunner.Player;
 velorunner.Player.prototype.update = function () {
 
 	//if it's alive, move and animate the player based on their movements
-	if (this.alive) {
+	if (this.alive && !velorunner.pause) {
 		//console.log(this.dynamicDeaccelerationRate);
 		/*//collide player with a distance 300 pixels away from their anchor point
 		if (this.x >= this.anchorPoint + 300 && this.body.velocity.x > 0) {

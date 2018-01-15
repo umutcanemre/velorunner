@@ -22,6 +22,12 @@ velorunner.Obstacle.prototype = Object.create(Phaser.Sprite.prototype);
 velorunner.Obstacle.prototype.constructor = velorunner.Obstacle;
 
 velorunner.Obstacle.prototype.update = function () {
-	//make obstacles move at level speed
-	this.body.velocity.x = -velorunner.getLevelSpeed();
+	if (!velorunner.pause) {
+		//make obstacles move at level speed
+		this.body.velocity.x = -velorunner.getLevelSpeed();
+	}
+
+	else {
+		this.body.velocity.x = 0;
+	}
 };

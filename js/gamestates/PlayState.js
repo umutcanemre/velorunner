@@ -7,12 +7,15 @@ velorunner.PlayState = function() {
 	this.player = null;
 	this.background = null;
 	this.globalMap = null;
+
+
 	this.layer = null;
 	this.Obstacles = null;
 	this.lastSpawnedObstacle = 0;
 	this.distance = 0;
 	this.level1 = false;
 	velorunner.levelSpeed = 400;
+	velorunner.pause = false;
 };
 
 
@@ -49,8 +52,15 @@ velorunner.PlayState.prototype = {
 		this.background = this.game.add.tileSprite(0, 0, velorunner.gameWidth, velorunner.gameHeight, 'atlas', 'bg.png');
 		this.distanceText = this.game.add.text(15, 15, "Distance: " + this.distance, {font: '24px 8-bitpusab', fill: 'white'})
 		this.energyBar = this.game.add.sprite(this.game.world.centerX - 200, 15, 'energybar');
+			
+		this.pauseButton = this.createButton(velorunner.gameWidth - 200, 15, velorunner.pause ? 'Unpause' : 'Pause', (function(target) {
+			velorunner.pause = !velorunner.pause; 
+			target.text = velorunner.pause ? 'Unpause' : 'Pause';
+		}));
 		//background.fixedToCamera = true;
 	},
+
+	
 
 	populate: function() {
 		//add group for obstacles
@@ -101,22 +111,28 @@ velorunner.PlayState.prototype = {
 	update: function() {
 		//collide player with all obstacles
 		this.game.physics.arcade.collide(player, Obstacles, null, this.playerObstacleCollision, this);
-		this.background.autoScroll(-velorunner.levelSpeed / 4, 0);
 		this.wrapObstaclesAround();
-
-		if (player.alive) {
-			this.distance += (velorunner.levelSpeed/2000);
-			
-			//increase speed slowly each tick
-			velorunner.levelSpeed += 0.1;
-			
-
-			this.energyBar.width = player.energy * 4;
-		}
-		
-		this.background.tint = Phaser.Color.getColor((this.distance), 0, 0);
+		this.background.tint = Phaser.Color.getColor(255, (255 - (this.distance/2)), (255 - (this.distance/2)));
 
 		this.distanceText.setText("Distance: " + Math.floor(this.distance));
+
+		if (!velorunner.pause) {
+			this.background.autoScroll(-velorunner.levelSpeed / 4, 0);
+			if (player.alive) {
+				this.distance += (velorunner.levelSpeed/2000);
+				
+				//increase speed slowly each tick
+				velorunner.levelSpeed += 0.1;
+				
+
+				this.energyBar.width = player.energy * 4;
+				
+			}
+		}
+
+		else {
+			this.background.autoScroll(0, 0);
+		}
 	},
 
 
@@ -172,6 +188,8 @@ velorunner.PlayState.prototype = {
 		//add logo
 		this.gameTitle = this.game.add.image(this.game.world.centerX, 148, 'gameTitle');
 		utils.centerGameObjects([this.gameTitle]);
+
+		this.pauseButton.destroy();
 
 		//add a play again button
 		this.addMenuOption('Play Again', function () {
