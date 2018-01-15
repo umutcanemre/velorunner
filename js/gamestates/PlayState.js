@@ -56,10 +56,12 @@ velorunner.PlayState.prototype = {
 		this.pauseButton = this.createButton(velorunner.gameWidth - 200, 15, velorunner.pause ? 'Unpause' : 'Pause', (function(target) {
 			if (!velorunner.pause) {
 				this.tempPlayerYVel = player.body.velocity.y;
+				this.tempPlayerXVel = player.body.velocity.x;
 			}
 
 			else {
 				 player.body.velocity.y = this.tempPlayerYVel;
+				 player.body.velocity.x = this.tempPlayerXVel;
 			}
 			velorunner.pause = !velorunner.pause; 
 			target.text = velorunner.pause ? 'Unpause' : 'Pause';
@@ -209,6 +211,12 @@ velorunner.PlayState.prototype = {
 			//velorunner.levelSpeed = 300;
       		velorunner.game.state.start('PlayState');
     	}, "redbase");
+
+    	this.addMenuOption('Menu', function () {
+			console.log("Game Restarting");
+			//velorunner.levelSpeed = 300;
+      		velorunner.game.state.start('MenuState');
+    	});
 	},
 	
 	//display debug info
