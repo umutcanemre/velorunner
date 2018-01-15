@@ -11,6 +11,7 @@ velorunner.PlayState = function() {
 	this.Obstacles = null;
 	this.lastSpawnedObstacle = 0;
 	this.distance = 0;
+	this.level1 = false;
 	velorunner.levelSpeed = 400;
 };
 
@@ -103,13 +104,19 @@ velorunner.PlayState.prototype = {
 		this.background.autoScroll(-velorunner.levelSpeed / 4, 0);
 		this.wrapObstaclesAround();
 
-		this.distance += (velorunner.levelSpeed/2000);
+		if (player.alive) {
+			this.distance += (velorunner.levelSpeed/2000);
+			
+			//increase speed slowly each tick
+			velorunner.levelSpeed += 0.1;
+			
+
+			this.energyBar.width = player.energy * 4;
+		}
+		
+		this.background.tint = Phaser.Color.getColor((this.distance), 0, 0);
+
 		this.distanceText.setText("Distance: " + Math.floor(this.distance));
-
-		this.energyBar.width = player.energy * 4;
-		//increase speed slowly each tick
-		velorunner.levelSpeed += 0.1;
-
 	},
 
 

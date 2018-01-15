@@ -6,7 +6,7 @@ velorunner.Player = function(game, x, y) {
 	this.alive = true;
 	this.anchorPoint = x;
 	this.energy = 100;
-	this.energyRecharge = 0.3;
+	this.energyRecharge = 0.5;
 	this.dynamicDeaccelerationRate = this.deaccelerationRate;
 	//this.maxVelocity = 900;
 
@@ -52,11 +52,11 @@ velorunner.Player.prototype.update = function () {
 
 	//if it's alive, move and animate the player based on their movements
 	if (this.alive) {
-		console.log(this.dynamicDeaccelerationRate);
-		//collide player with a distance 300 pixels away from their anchor point
+		//console.log(this.dynamicDeaccelerationRate);
+		/*//collide player with a distance 300 pixels away from their anchor point
 		if (this.x >= this.anchorPoint + 300 && this.body.velocity.x > 0) {
 			this.body.velocity.x = 0;
-		}
+		}*/
 
 		//collide player with anchor point
 		if (this.x <= this.anchorPoint) {
@@ -68,8 +68,15 @@ velorunner.Player.prototype.update = function () {
 		//if they are pressing right, make them move right
 		if (this.playerControls.down.isDown && this.energy > 0) {
 			this.dynamicDeaccelerationRate = this.deaccelerationRate;
-			this.energy -= 1;
-			if (!(this.x >= this.anchorPoint + 300)) {
+			if (this.energy - 1.5 < 0) {
+				this.energy = 0;
+			}
+
+			else {
+				this.energy -= 1.5;
+			}
+
+			if (this.body.velocity.x < 500) {
 				this.body.velocity.x += this.acceleration;
 				//this.scale.setTo(1);
 			}
@@ -77,13 +84,23 @@ velorunner.Player.prototype.update = function () {
 
 		//slowly make the player go toward the starting point if the player is not moving right
 		else if (this.x > this.anchorPoint) {
+			if (this.body.velocity.x > 100) {
+				this.body.velocity.x -= this.dynamicDeaccelerationRate * 2;
+			}
+
+			else {
+				this.body.velocity.x -= this.dynamicDeaccelerationRate;
+			}
+
 			//if reducing the player's velocity again will make the player start moving in the other direction, stop reducing velocity and stop the player
-			this.dynamicDeaccelerationRate = this.dynamicDeaccelerationRate/1.005;
-			this.body.velocity.x -= this.dynamicDeaccelerationRate;
+			this.dynamicDeaccelerationRate = this.dynamicDeaccelerationRate/1.01;
+			
 
 		}
 
+		//if the player is not moving, recharge their energy
 		if (!this.playerControls.down.isDown && this.energy < 100) {
+			//make sure energy doesn't exceed 100
 			if (this.energy + this.energyRecharge > 100) {
 				this.energy = 100;
 			}
