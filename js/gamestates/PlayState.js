@@ -66,8 +66,8 @@ velorunner.PlayState.prototype = {
 		}));
 		//background.fixedToCamera = true;
 
-		this.controlsText = this.game.add.text(this.game.world.centerX, 50, "Space to Jump\nDownarrow to move right\n" + this.distance, {font: '12px 8-bitpusab', fill: 'white'})
-		utils.centerGameObjects([this.controlsText]);
+		this.controlsText = this.game.add.text(this.game.world.centerX, 45, "Space to Jump\nDownarrow to move right\n" + this.distance, {font: '12px 8-bitpusab', fill: 'white'})
+		this.controlsText.anchor.x = 0.5;
 	},
 
 	
