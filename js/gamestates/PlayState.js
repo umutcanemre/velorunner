@@ -35,7 +35,7 @@ velorunner.PlayState.prototype = {
 		this.Obstacles = null;
 		this.lastSpawnedObstacle = 0;
 		this.distance = 0;
-		velorunner.levelSpeed = 400;
+		velorunner.levelSpeed = 1200;
 
 
 		//start physics, call functions to initialize world and player
@@ -68,7 +68,7 @@ velorunner.PlayState.prototype = {
 		}));
 		//background.fixedToCamera = true;
 
-		this.controlsText = this.game.add.text(this.game.world.centerX, 45, "Space to Jump\nDownarrow to move right\n" + this.distance, {font: '12px 8-bitpusab', fill: 'white'})
+		this.controlsText = this.game.add.text(this.game.world.centerX, 45, "Space to Jump\nDownarrow to move right", {font: '12px 8-bitpusab', fill: 'white'})
 		this.controlsText.anchor.x = 0.5;
 	},
 
@@ -146,6 +146,10 @@ velorunner.PlayState.prototype = {
 		else {
 			this.game.physics.arcade.gravity.y = 0;
 			this.background.autoScroll(0, 0);
+		}
+
+		if (this.distance > 150) {
+			this.controlsText.destroy();
 		}
 	},
 
