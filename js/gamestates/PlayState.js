@@ -13,7 +13,8 @@ velorunner.PlayState = function() {
 	this.Obstacles = null;
 	this.lastSpawnedObstacle = 0;
 	this.distance = 0;
-	this.level1 = false;
+	this.level2 = 800;
+	this.level3 = 1600;
 	velorunner.levelSpeed = 400;
 	velorunner.pause = false;
 };
@@ -35,7 +36,7 @@ velorunner.PlayState.prototype = {
 		this.Obstacles = null;
 		this.lastSpawnedObstacle = 0;
 		this.distance = 0;
-		velorunner.levelSpeed = 1200;
+		velorunner.levelSpeed = 600;
 
 
 		//start physics, call functions to initialize world and player
@@ -85,7 +86,8 @@ velorunner.PlayState.prototype = {
 
 		//spawn 5 total obstacles
 		for (var i = 0; i < 5; i++) {
-			this.createObstacle(Obstacles.children[this.lastSpawnedObstacle].x + 250 + (Math.floor(Math.random() * 1000)), 550);
+			//make each obstacle spawn a random distance away from the previous obstacle, with a minimum distance
+			this.createObstacle(Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + velorunner.levelSpeed/2 + (Math.floor(Math.random() * 1000)), 550);
 			//this.lastSpawnedObstacle = Obstacles.children[i].z;
 			//console.log(Obstacles.children[this.lastSpawnedObstacle].z);
 			//lastPos = Obstacles.children[i].x;
@@ -107,24 +109,10 @@ velorunner.PlayState.prototype = {
 		this.game.add.existing(player);
 	},
 
-	/*bindControls: function() {
-		//set controls
-		this.gameControls = {
-			up: this.game.input.keyboard.addKey(Phaser.Keyboard.UP),
-			left: this.game.input.keyboard.addKey(Phaser.Keyboard.LEFT),
-			right: this.game.input.keyboard.addKey(Phaser.Keyboard.RIGHT),
-			down: this.game.input.keyboard.addKey(Phaser.Keyboard.DOWN)
-		};
-
-		//capture arrow keys
-		this.game.input.keyboard.addKeyCapture ( [Phaser.Keyboard.LEFT, Phaser.Keyboard.RIGHT, Phaser.Keyboard.DOWN, Phaser.Keyboard.UP]);
-	}, */
-
 	update: function() {
 		//collide player with all obstacles
 		this.game.physics.arcade.collide(player, Obstacles, null, this.playerObstacleCollision, this);
 		this.wrapObstaclesAround();
-		this.background.tint = Phaser.Color.getColor(255, (255 - (this.distance/2)), (255 - (this.distance/2)));
 
 		this.distanceText.setText("Distance: " + Math.floor(this.distance));
 
@@ -132,13 +120,54 @@ velorunner.PlayState.prototype = {
 			this.game.physics.arcade.gravity.y = 1300;
 			this.background.autoScroll(-velorunner.levelSpeed / 4, 0);
 			if (player.alive) {
+				//update distance
 				this.distance += (velorunner.levelSpeed/2000);
-				
+				//update energy
+				this.energyBar.width = player.energy * 4;
+
 				//increase speed slowly each tick
-				velorunner.levelSpeed += 0.1;
 				
 
-				this.energyBar.width = player.energy * 4;
+				if (this.distance < this.level2) {
+					velorunner.levelSpeed += 0.15;
+					if (this.distance < this.level2/2) {
+						this.background.tint = Phaser.Color.getColor(255, (255 - (this.distance/(this.level2/2/255))), (255 - (this.distance/(this.level2/2/255))));
+					}
+
+					else {
+						this.background.tint = Phaser.Color.getColor((255 - ((this.distance-this.level2/2)/(this.level2/2/40))), (0 + ((this.distance-this.level2/2)/(this.level2/2/127))), 0);
+					}
+					//console.log(Phaser.Color.getRGB(this.background.tint));
+				}
+
+				else if (this.distance < this.level3) {
+					velorunner.levelSpeed += 0.05;
+					if (this.distance-this.level2 < this.level2/2) {
+						this.background.tint = Phaser.Color.getColor(215 + ((this.distance-this.level2)/(this.level2/2/40)), (127 + ((this.distance-this.level2)/(this.level2/2/127))), 0);
+					}
+
+					else {
+						this.background.tint = Phaser.Color.getColor((255 - ((this.distance-this.level2*1.5)/(this.level2/2/255))), 255, 0);
+					}
+				}
+
+				else if (this.distance > this.level3) {
+					velorunner.levelSpeed += 0.01;
+					if (this.distance-this.level2*2 < this.level2/2) {
+						this.background.tint = Phaser.Color.getColor(0, (255 - ((this.distance-this.level2*2)/(this.level2/2/255))), (0 + ((this.distance-this.level2*2)/(this.level2/2/255))));
+					}
+
+					else if ((this.distance-this.level2*2.5 < this.level2/2)) {
+						this.background.tint = Phaser.Color.getColor((0 + ((this.distance-this.level2*2.5)/(this.level2/2/255))), 0, 255);
+					}
+
+					else {
+						this.background.tint = Phaser.Color.getColor(255, 0, 255);
+					}
+				} 
+
+				
+				
 				
 			}
 		}
@@ -148,7 +177,7 @@ velorunner.PlayState.prototype = {
 			this.background.autoScroll(0, 0);
 		}
 
-		if (this.distance > 150) {
+		if (this.distance > 100) {
 			this.controlsText.destroy();
 		}
 	},
@@ -170,7 +199,7 @@ velorunner.PlayState.prototype = {
 	}, 
 
 	resetObstacle: function (obstacle) {
-		obstacle.position.x = Obstacles.children[this.lastSpawnedObstacle].x + 250 + Math.floor(Math.random() * 1000);
+		obstacle.position.x = Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + velorunner.levelSpeed/2 +  Math.floor(Math.random() * 1000);
 		this.lastSpawnedObstacle = obstacle.z;
 	},
 
