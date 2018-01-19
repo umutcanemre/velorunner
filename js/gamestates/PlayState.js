@@ -11,11 +11,13 @@ velorunner.PlayState = function() {
 
 	this.layer = null;
 	this.Obstacles = null;
+	this.minDistance = velorunner.levelSpeed/2;
+
 	this.lastSpawnedObstacle = 0;
 	this.distance = 0;
 	this.level2 = 800;
 	this.level3 = 1600;
-	velorunner.levelSpeed = 400;
+	velorunner.levelSpeed = 600;
 	velorunner.pause = false;
 };
 
@@ -32,11 +34,16 @@ velorunner.PlayState.prototype = {
 		this.player = null;
 		this.background = null;
 		this.globalMap = null;
+
 		this.layer = null;
 		this.Obstacles = null;
+		this.minDistance = velorunner.levelSpeed/2;
+
 		this.lastSpawnedObstacle = 0;
 		this.distance = 0;
+
 		velorunner.levelSpeed = 600;
+		velorunner.pause = false;
 
 
 		//start physics, call functions to initialize world and player
@@ -69,7 +76,7 @@ velorunner.PlayState.prototype = {
 		}));
 		//background.fixedToCamera = true;
 
-		this.controlsText = this.game.add.text(this.game.world.centerX, 45, "Space to Jump\nDownarrow to move right", {font: '12px 8-bitpusab', fill: 'white'})
+		this.controlsText = this.game.add.text(this.game.world.centerX, 45, "Space to Jump\nRight-Arrow to move right\nDown-Arrow to crouch", {font: '12px 8-bitpusab', fill: 'white'})
 		this.controlsText.anchor.x = 0.5;
 	},
 
@@ -87,7 +94,7 @@ velorunner.PlayState.prototype = {
 		//spawn 5 total obstacles
 		for (var i = 0; i < 5; i++) {
 			//make each obstacle spawn a random distance away from the previous obstacle, with a minimum distance
-			this.createObstacle(Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + velorunner.levelSpeed/2 + (Math.floor(Math.random() * 1000)), 550);
+			this.createObstacle(Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + this.minDistance + (Math.floor(Math.random() * 1000)), 550);
 			//this.lastSpawnedObstacle = Obstacles.children[i].z;
 			//console.log(Obstacles.children[this.lastSpawnedObstacle].z);
 			//lastPos = Obstacles.children[i].x;
@@ -129,7 +136,7 @@ velorunner.PlayState.prototype = {
 				
 
 				if (this.distance < this.level2) {
-					velorunner.levelSpeed += 0.15;
+					velorunner.levelSpeed += 0.125;
 					if (this.distance < this.level2/2) {
 						this.background.tint = Phaser.Color.getColor(255, (255 - (this.distance/(this.level2/2/255))), (255 - (this.distance/(this.level2/2/255))));
 					}
@@ -164,11 +171,7 @@ velorunner.PlayState.prototype = {
 					else {
 						this.background.tint = Phaser.Color.getColor(255, 0, 255);
 					}
-				} 
-
-				
-				
-				
+				} 	
 			}
 		}
 
@@ -199,7 +202,39 @@ velorunner.PlayState.prototype = {
 	}, 
 
 	resetObstacle: function (obstacle) {
-		obstacle.position.x = Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + velorunner.levelSpeed/2 +  Math.floor(Math.random() * 1000);
+		if (this.distance < this.level2) {
+			obstacle.position.x = Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + this.minDistance +  Math.floor(Math.random() * 1000);
+		}
+
+		else if (this.distance < this.level3) {
+			if (Math.random() > 0.7) {
+				this.minDistance = velorunner.levelSpeed;
+				obstacle.position.y = 450;
+				obstacle.position.x = Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + this.minDistance +  Math.floor(Math.random() * 100);
+			}
+
+			else {
+				obstacle.position.y = 550;
+				obstacle.position.x = Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + this.minDistance +  Math.floor(Math.random() * 1000);
+				this.minDistance = velorunner.levelSpeed/2;
+			}
+		}
+
+		else if (this.distance > this.level3) {
+			if (Math.random() > 0.7) {
+				this.minDistance = velorunner.levelSpeed;
+				obstacle.position.y = 450;
+				obstacle.position.x = Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + this.minDistance +  Math.floor(Math.random() * 50);
+			}
+
+			else {
+				obstacle.position.y = 550;
+				obstacle.position.x = Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + this.minDistance +  Math.floor(Math.random() * 1000);
+				this.minDistance = velorunner.levelSpeed/3;
+			}
+		}
+
+		obstacle.position.x = Obstacles.children[this.lastSpawnedObstacle].x + Obstacles.children[this.lastSpawnedObstacle].width + this.minDistance +  Math.floor(Math.random() * 1000);
 		this.lastSpawnedObstacle = obstacle.z;
 	},
 

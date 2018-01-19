@@ -8,6 +8,7 @@ velorunner.Player = function(game, x, y) {
 	this.energy = 100;
 	this.energyRecharge = 0.5;
 	this.dynamicDeaccelerationRate = this.deaccelerationRate;
+
 	//this.maxVelocity = 900;
 
 	//invoke phaser sprite for player
@@ -24,10 +25,13 @@ velorunner.Player = function(game, x, y) {
 	this.animations.add('left', Phaser.Animation.generateFrameNames('testing', 1, 5, '.png'), 5, true);
 	this.animations.add('right', Phaser.Animation.generateFrameNames('testing', 6, 10, '.png'), 5, true);
 	this.animations.add('jump', Phaser.Animation.generateFrameNames('testing', 11, 11, '.png'), 5, true);
+	this.animations.add('crouch', Phaser.Animation.generateFrameNames('testing', 12, 12, '.png'), 5, true);
 
 	//start off with idle animation
 	this.animations.play('idle');
 
+	this.normalHeight = this.height;
+	this.crouchHeight = this.height/2;
 
 	//define controls for player
 	this.playerControls = {
@@ -66,7 +70,7 @@ velorunner.Player.prototype.update = function () {
 		}
 
 		//if they are pressing right, make them move right
-		if (this.playerControls.down.isDown && this.energy > 0) {
+		if (this.playerControls.right.isDown && this.energy > 0) {
 			this.dynamicDeaccelerationRate = this.deaccelerationRate;
 			if (this.energy - 1.5 < 0) {
 				this.energy = 0;
@@ -99,7 +103,7 @@ velorunner.Player.prototype.update = function () {
 		}
 
 		//if the player is not moving, recharge their energy
-		if (!this.playerControls.down.isDown && this.energy < 100) {
+		if (!this.playerControls.right.isDown && this.energy < 100) {
 			//make sure energy doesn't exceed 100
 			if (this.energy + this.energyRecharge > 100) {
 				this.energy = 100;
@@ -111,17 +115,34 @@ velorunner.Player.prototype.update = function () {
 		}
 
 		//if the player is on the floor and they press up, give them upwards velocity
-		if (this.playerControls.space.isDown && this.body.onFloor()) {
+		if (this.playerControls.space.isDown && this.body.onFloor() && !this.playerControls.down.isDown) {
 			this.body.velocity.y = -550;
 		}
+
 
 		//if the player is in the air, play jumping animation
 		if (!this.body.onFloor()) {
 			this.animations.play('jump');
 		}
 
+		if (this.playerControls.down.isDown && this.body.onFloor()) {
+			//this.body.clearShapes();
+			if (this.body.onFloor() && justCrouched) {
+				justCrouched = false;
+				this.y = 577;
+			}
+			this.height = this.crouchHeight;
+			this.animations.play('down');
+			
+		}
+
+		else if (!this.playerControls.down.isDown) {
+			this.height = this.normalHeight;
+			justCrouched = true;
+		}
+
 		//if the player is running normally and on floor play the right animation
-		else if (this.body.onFloor() && !this.playerControls.left.isDown){
+		if (this.body.onFloor() && !this.playerControls.left.isDown && !this.playerControls.down.isDown){
 			this.animations.play('right');
 		}
 	}

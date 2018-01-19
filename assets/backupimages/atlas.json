@@ -8,61 +8,55 @@
 	},
 	{
 		"filename": "testing0.png",
-		"frame": {"x":93, "y":601, "w":92, "h":92},
+		"frame": {"x":0, "y":601, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
 	{
 		"filename": "testing1.png",
-		"frame": {"x":186, "y":787, "w":92, "h":92},
+		"frame": {"x":93, "y":694, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
 	{
 		"filename": "testing10.png",
-		"frame": {"x":0, "y":741, "w":92, "h":92},
+		"frame": {"x":0, "y":787, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
 	{
 		"filename": "testing11.png",
-		"frame": {"x":0, "y":648, "w":92, "h":92},
+		"frame": {"x":0, "y":694, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
 	{
-		"filename": "testing12.png",
-		"frame": {"x":0, "y":601, "w":92, "h":46},
-		"spriteSourceSize": {"x":0,"y":0,"w":92,"h":46},
-		"sourceSize": {"w":92,"h":46}
-	},
-	{
 		"filename": "testing2.png",
-		"frame": {"x":186, "y":694, "w":92, "h":92},
+		"frame": {"x":186, "y":787, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
 	{
 		"filename": "testing3.png",
-		"frame": {"x":186, "y":601, "w":92, "h":92},
+		"frame": {"x":186, "y":694, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
 	{
 		"filename": "testing4.png",
-		"frame": {"x":93, "y":880, "w":92, "h":92},
+		"frame": {"x":186, "y":601, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
 	{
 		"filename": "testing5.png",
-		"frame": {"x":93, "y":787, "w":92, "h":92},
+		"frame": {"x":93, "y":880, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
 	{
 		"filename": "testing6.png",
-		"frame": {"x":93, "y":694, "w":92, "h":92},
+		"frame": {"x":93, "y":787, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
@@ -74,20 +68,20 @@
 	},
 	{
 		"filename": "testing8.png",
-		"frame": {"x":0, "y":927, "w":92, "h":92},
+		"frame": {"x":93, "y":601, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	},
 	{
 		"filename": "testing9.png",
-		"frame": {"x":0, "y":834, "w":92, "h":92},
+		"frame": {"x":0, "y":880, "w":92, "h":92},
 		"spriteSourceSize": {"x":2,"y":2,"w":96,"h":96},
 		"sourceSize": {"w":96,"h":96}
 	}
 
 ],
 "meta": {
-	"image": "main.png",
+	"image": "atlas.png",
 	"size": {"w": 1024, "h": 1024},
 	"scale": "1"
 }
